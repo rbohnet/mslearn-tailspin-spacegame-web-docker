@@ -54,17 +54,19 @@ stages:
           $(tag)
 
 - stage: 'Deploy'
-  displayName: 'Deploy the web application'
+  displayName: 'Deploy the Container'
   dependsOn: Build
   jobs:
-  - deployment: Deploy
+  - job: 'Deploy'
+    displayName: 'Deploy Job'
     pool:
       vmImage: 'ubuntu-20.04'
     variables:
     - group: Release
+    
     steps:
     - task: AzureWebAppContainer@1
       inputs:
-       appName: $(WebAppName)
-       azureSubscription: 'Resource Manager - Tailspin - Space Game'
-       imageName: $(RegistryName)/$(webRepository):$(build.buildId)
+        appName: $(WebAppName)
+        azureSubscription: 'Resource Manager - Tailspin - Space Game'
+        imageName: $(RegistryName)/$(webRepository):$(build.buildId)
